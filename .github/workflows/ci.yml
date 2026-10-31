@@ -1,0 +1,136 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-typecheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      # actions/setup-node with `cache: pnpm` expects pnpm to be on PATH.
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '10.8.1'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+          cache: 'pnpm'
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm -r lint
+
+      - name: Typecheck
+        run: pnpm -r typecheck
+
+  worker-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '10.8.1'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+          cache: 'pnpm'
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Clean coverage outputs
+        run: rm -rf apps/worker/coverage apps/worker/coverage-cron
+
+      - name: Cron scheduler tests
+        run: pnpm --filter @cf-uptime/worker test:cron
+
+      - name: Coverage summary (cron scheduler)
+        if: always()
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = 'apps/worker/coverage-cron/coverage-summary.json';
+          if (!fs.existsSync(path)) {
+            fs.appendFileSync(
+              process.env.GITHUB_STEP_SUMMARY,
+              '### Cron Coverage\n\nCron coverage summary not found.\n',
+            );
+            process.exit(0);
+          }
+
+          const report = JSON.parse(fs.readFileSync(path, 'utf8'));
+          const total = report.total ?? {};
+          const formatPct = (value) => `${Number(value ?? 0).toFixed(2)}%`;
+
+          const lines = [
+            '### Cron Coverage',
+            '',
+            `- Statements: **${formatPct(total.statements?.pct)}**`,
+            `- Branches: **${formatPct(total.branches?.pct)}**`,
+            `- Functions: **${formatPct(total.functions?.pct)}**`,
+            `- Lines: **${formatPct(total.lines?.pct)}**`,
+          ];
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `${lines.join('\n')}\n`);
+          NODE
+
+      - name: Test
+        run: pnpm test
+
+      - name: Coverage summary (worker)
+        if: always()
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const path = 'apps/worker/coverage/coverage-summary.json';
+          if (!fs.existsSync(path)) {
+            fs.appendFileSync(
+              process.env.GITHUB_STEP_SUMMARY,
+              '### Worker Coverage\n\nCoverage summary not found.\n',
+            );
+            process.exit(0);
+          }
+
+          const report = JSON.parse(fs.readFileSync(path, 'utf8'));
+          const total = report.total ?? {};
+          const formatPct = (value) => `${Number(value ?? 0).toFixed(2)}%`;
+
+          const lines = [
+            '### Worker Coverage',
+            '',
+            `- Statements: **${formatPct(total.statements?.pct)}**`,
+            `- Branches: **${formatPct(total.branches?.pct)}**`,
+            `- Functions: **${formatPct(total.functions?.pct)}**`,
+            `- Lines: **${formatPct(total.lines?.pct)}**`,
+          ];
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, `${lines.join('\n')}\n`);
+          NODE
+
+      - name: Upload worker coverage artifact
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: worker-coverage
+          path: |
+            apps/worker/coverage
+            apps/worker/coverage-cron
+          if-no-files-found: ignore
+          retention-days: 7

@@ -1,0 +1,10 @@
+{
+  "name": "@cf-uptime/shared",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "lint": "pnpm -w exec eslint --config eslint.config.mjs packages/shared",
+    "typecheck": "pnpm -w exec tsc -p packages/shared/tsconfig.json --noEmit"
+  }
+}

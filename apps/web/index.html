@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#22c55e" />
+    <meta name="description" content="Real-time status and incident updates." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="CF Uptime" />
+    <meta property="og:description" content="Real-time status and incident updates." />
+    <meta property="og:site_name" content="CF Uptime" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="CF Uptime" />
+    <meta name="twitter:description" content="Real-time status and incident updates." />
+    <script>
+      (function () {
+        try {
+          var key = 'uptimer-theme';
+          var stored = localStorage.getItem(key);
+          var theme =
+            stored === 'light' || stored === 'dark' || stored === 'system' ? stored : 'system';
+          var systemDark =
+            window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = theme === 'dark' || (theme === 'system' && systemDark);
+
+          var root = document.documentElement;
+          root.style.colorScheme = isDark ? 'dark' : 'light';
+          root.style.backgroundColor = isDark ? '#0f172a' : '#f8fafc';
+          if (isDark) root.classList.add('dark');
+          else root.classList.remove('dark');
+        } catch (_err) {
+          // ignore
+        }
+      })();
+    </script>
+    <title>CF Uptime</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

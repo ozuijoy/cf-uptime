@@ -1,0 +1,24 @@
+{
+  "name": "@cf-uptime/db",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./client": "./src/client.ts",
+    "./json": "./src/json.ts",
+    "./schema": "./src/schema.ts"
+  },
+  "scripts": {
+    "lint": "pnpm -w exec eslint --config eslint.config.mjs packages/db",
+    "typecheck": "pnpm -w exec tsc -p packages/db/tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.1",
+    "zod": "^3.0.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.0.0"
+  }
+}
