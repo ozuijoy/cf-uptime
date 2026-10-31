@@ -4,8 +4,8 @@
 
 **Serverless uptime monitoring & status page on Cloudflare's edge network**
 
-[![CI](https://github.com/VrianCao/cf-uptime/actions/workflows/ci.yml/badge.svg)](https://github.com/VrianCao/cf-uptime/actions/workflows/ci.yml)
-[![Deploy](https://github.com/VrianCao/cf-uptime/actions/workflows/deploy.yml/badge.svg)](https://github.com/VrianCao/cf-uptime/actions/workflows/deploy.yml)
+[![CI](https://github.com/ozuijoy/cf-uptime/actions/workflows/ci.yml/badge.svg)](https://github.com/ozuijoy/cf-uptime/actions/workflows/ci.yml)
+[![Deploy](https://github.com/ozuijoy/cf-uptime/actions/workflows/deploy.yml/badge.svg)](https://github.com/ozuijoy/cf-uptime/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 Monitor your services, display real-time status to visitors, and get notified when things go down — all running on Cloudflare Workers + Pages + D1 with zero ops.

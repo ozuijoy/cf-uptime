@@ -4,8 +4,8 @@
 
 **基於 Cloudflare 邊緣網路的 Serverless 可用性監控與狀態頁**
 
-[![CI](https://github.com/VrianCao/cf-uptime/actions/workflows/ci.yml/badge.svg)](https://github.com/VrianCao/cf-uptime/actions/workflows/ci.yml)
-[![Deploy](https://github.com/VrianCao/cf-uptime/actions/workflows/deploy.yml/badge.svg)](https://github.com/VrianCao/cf-uptime/actions/workflows/deploy.yml)
+[![CI](https://github.com/ozuijoy/cf-uptime/actions/workflows/ci.yml/badge.svg)](https://github.com/ozuijoy/cf-uptime/actions/workflows/ci.yml)
+[![Deploy](https://github.com/ozuijoy/cf-uptime/actions/workflows/deploy.yml/badge.svg)](https://github.com/ozuijoy/cf-uptime/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 監控你的服務，向訪客展示實時狀態，並在服務異常時傳送通知 — 全部執行在 Cloudflare Workers + Pages + D1 上，零運維。

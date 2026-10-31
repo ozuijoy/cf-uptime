@@ -9,7 +9,7 @@
 ```bash
 # 前置要求：Node.js >= 22.14.0、pnpm >= 10.8.1
 
-git clone https://github.com/VrianCao/cf-uptime.git
+git clone https://github.com/ozuijoy/cf-uptime.git
 cd CF Uptime
 pnpm install
 cp apps/worker/.dev.vars.example apps/worker/.dev.vars
